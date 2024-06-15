@@ -222,8 +222,7 @@ def sentiment_analysis_view(request):
     neucnt = queries.aggregate(Sum('neutral_articles'))['neutral_articles__sum'] or 0
     negcnt = queries.aggregate(Sum('negative_articles'))['negative_articles__sum'] or 0
     
-    # Fetch reviews from database (assuming Review model exists)
-    reviews = Review.objects.all()
+   
 
     
     context = {
