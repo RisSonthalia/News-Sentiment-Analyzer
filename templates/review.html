@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <style>
+        /* Custom CSS for review form and reviews */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #1d1d1d;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .logo img {
+            height: 50px; 
+        }
+    
+        .nav-links ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+    
+        .nav-links ul li {
+            margin: 0;
+        }
+    
+        .nav-links ul li a {
+            color: #fff; 
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+    
+        .nav-links ul li a:hover {
+            color: #555; 
+        }
+
+        footer {
+            background-color: #333; /* Adjust as needed */
+            color: #fff; /* Adjust as needed */
+            padding: 20px;
+            text-align: center;
+        }
+    
+        .footer-content {
+            text-align: center;
+        }
+    
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+    
+        .social-icons a {
+            color: #fff; /* Adjust as needed */
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+    
+        .social-icons a:hover {
+            color: #bbb; /* Adjust as needed */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            min-height: calc(100vh - 140px); /* Adjust based on header and footer height */
+        }
+
+        .box {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .button.is-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .button.is-primary:hover {
+            background-color: #45a049;
+            border-color: #45a049;
+        }
+
+        .media-content {
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .media-content p {
+            margin-bottom: 5px;
+        }
+
+        .media-content small {
+            color: #888;
+        }
+
+        .fas.fa-star, .far.fa-star {
+            color: #f1c40f;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
+                        <li class="user-section">
+                            <span>Hello, {{ user.first_name }}</span>
+                            <a href="{% url 'logoutUser' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1 class="title">Customer Reviews</h1>
+
+            <!-- Review Form -->
+            <div class="box">
+                <h2 class="subtitle">Write a Review</h2>
+                <form method="post" action="{% url 'review_page' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="button is-primary">Submit Review</button>
+                </form>
+            </div>
+
+            <!-- Display Reviews -->
+            <div class="box">
+                <h2 class="subtitle">Latest Reviews</h2>
+                {% for review in reviews %}
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>{{ review.user.username }}</strong>
+                                    <br>
+                                    Rating: 
+                                    {% for _ in review.star_icons %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    {% for _ in review.empty_star_icons %}
+                                        <i class="far fa-star"></i>
+                                    {% endfor %}
+                                </p>
+                                <p>{{ review.review_text }}</p>
+                                <p><small>{{ review.datetime }}</small></p>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p>No reviews yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 News App. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
