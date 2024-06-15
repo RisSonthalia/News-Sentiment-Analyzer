@@ -90,15 +90,16 @@ def news_search(request):
             if query:
                 mylist,poscnt,neucnt,negcnt=find_news(query)
                 
-                 # Save the search data
-                search_query = SearchQueries(
-                user=request.user,
-                keyword=query,
-                positive_articles=poscnt,
-                negative_articles=neucnt,
-                neutral_articles=negcnt
-                )
-                search_query.save()
+                # Save the search data
+                if not request.user.is_anonymous:
+                    search_query = SearchQueries(
+                    user=request.user,
+                    keyword=query,
+                    positive_articles=poscnt,
+                    negative_articles=neucnt,
+                    neutral_articles=negcnt
+                    )
+                    search_query.save()
         
                 context = {'mylist': mylist,'query':query,'poscnt':poscnt,'negcnt':negcnt,'neucnt':neucnt}
                 return render(request, 'index.html', context)
