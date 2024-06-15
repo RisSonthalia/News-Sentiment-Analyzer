@@ -12,7 +12,12 @@ from .forms import SignUpForm,UserLoginForm
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import SearchQueries
+from .models import SearchQueries,Review
+from django.utils import timezone
+from datetime import timedelta
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from .forms import ReviewForm
 
 def register(request):
     if request.method == 'POST':
@@ -90,7 +95,7 @@ def news_search(request):
             if query:
                 mylist,poscnt,neucnt,negcnt=find_news(query)
                 
-                # Save the search data
+                 # Save the search data
                 if not request.user.is_anonymous:
                     search_query = SearchQueries(
                     user=request.user,
@@ -187,3 +192,71 @@ def classify_sentiment(text):
     else:
         return "Neutral"
     
+@login_required
+def sentiment_analysis_view(request):
+    user = request.user
+
+    # Determine the filter based on the query parameter
+    filter = request.GET.get('filter', 'today')
+    now = timezone.now()
+
+    if filter == 'today':
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    elif filter == 'yesterday':
+        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    elif filter == 'last_7_days':
+        start_date = now - timedelta(days=7)
+    else:
+        start_date = None
+
+    if start_date:
+        if filter == 'yesterday':
+            queries = SearchQueries.objects.filter(user=user, search_date__range=(start_date, end_date))
+        else:
+            queries = SearchQueries.objects.filter(user=user, search_date__gte=start_date)
+    else:
+        queries = SearchQueries.objects.filter(user=user)
+
+    poscnt = queries.aggregate(Sum('positive_articles'))['positive_articles__sum'] or 0
+    neucnt = queries.aggregate(Sum('neutral_articles'))['neutral_articles__sum'] or 0
+    negcnt = queries.aggregate(Sum('negative_articles'))['negative_articles__sum'] or 0
+    
+    # Fetch reviews from database (assuming Review model exists)
+    reviews = Review.objects.all()
+
+    
+    context = {
+        'poscnt': poscnt,
+        'neucnt': neucnt,
+        'negcnt': negcnt,
+        'filter': filter,
+      
+    }
+
+    return render(request, 'sentiment_analysis.html', context)
+
+def review_page(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            new_review = form.save(commit=False)
+            new_review.user = request.user  # Assuming user is logged in
+            new_review.save()
+            return redirect('review_page')  # Redirect to the same page after submission
+    else:
+        form = ReviewForm()
+
+   # Fetch reviews from database (assuming Review model exists)
+    reviews = Review.objects.all()
+
+    # Prepare star icons data
+    for review in reviews:
+        review.star_icons = range(review.stars)  # List of filled stars
+        review.empty_star_icons = range(5 - review.stars)  # List of empty stars
+
+    context = {
+        'form': form,
+        'reviews': reviews,
+    }
+    return render(request, 'review.html', context)
