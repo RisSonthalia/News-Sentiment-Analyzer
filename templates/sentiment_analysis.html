@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    {% comment %} <link rel="stylesheet" href="static/style_home.css">
+    <link rel="stylesheet" href="static/style.css"> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding-top: 130px; /* Adjust based on the height of your fixed nav */
+        padding-bottom: 60px; /* Adjust based on the height of your fixed footer */
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto; /* This sets 20px margin on top and bottom, and auto on the sides */
+        padding-inline: 16px;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    select {
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .chart-container {
+        text-align:center;
+        position: relative;
+        height: 400px;
+        width: 100%;
+    }
+
+    nav {
+        background-color: #1d1d1d;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .logo img {
+        height: 50px; 
+    }
+
+    .nav-links ul {
+        list-style-type: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav-links ul li {
+        margin: 0;
+    }
+
+    .nav-links ul li a {
+        color: #fff; 
+        text-decoration: none;
+      
+        transition: color 0.3s ease;
+    }
+    .nav-links ul li span {
+        color: #fff; 
+        text-decoration: none;
+        
+    }
+
+    .nav-links ul li a:hover {
+        color: #555; 
+    }
+
+    .user-section {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-section span {
+        margin-right: 10px;
+    }
+
+    {% comment %} .reviews {
+        margin-top: 40px;
+    }
+
+    .review {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        background-color: #fff;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .review-stars {
+        color: #f39c12; /* Star color */
+        font-size: 20px;
+    }
+
+    .review-date {
+        font-size: 12px;
+        color: #777;
+    } {% endcomment %}
+
+    /* Font Awesome icons styling */
+    .fas.fa-star {
+        color: #f39c12; /* Filled star color */
+    }
+
+    .far.fa-star {
+        color: #ddd; /* Empty star color */
+    }
+
+    footer {
+        background-color: #333; /* Adjust as needed */
+        color: #fff; /* Adjust as needed */
+        padding: 20px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .footer-content {
+        text-align: center;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .social-icons a {
+        color: #fff; /* Adjust as needed */
+        margin: 0 10px;
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+        color: #bbb; /* Adjust as needed */
+    }
+</style>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
+                        <li class="user-section">
+                            <span>Hello, {{ user.first_name }}</span>
+                            <a href="{% url 'logoutUser' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h2>Sentiment Analysis</h2>
+            <form method="get">
+                <div class="select is-primary">
+                    <select name="filter" onchange="this.form.submit()">
+                        <option value="today" {% if filter == 'today' %}selected{% endif %}>Today</option>
+                        <option value="yesterday" {% if filter == 'yesterday' %}selected{% endif %}>Yesterday</option>
+                        <option value="last_7_days" {% if filter == 'last_7_days' %}selected{% endif %}>Last 7 Days</option>
+                        <option value="all_time" {% if filter == 'all_time' %}selected{% endif %}>All Time</option>
+                    </select>
+                </div>
+            </form>
+            <div class="chart-container">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+        {% comment %} <!-- In sentiment_analysis.html -->
+        <div class="reviews container">
+            <h3>Customer Reviews</h3>
+            {% for review in reviews %}
+                <div class="review">
+                    <div class="review-header">
+                        <span><strong>{{ review.user.username }}</strong></span>
+                        <span class="review-stars">
+                            {% for star in review.star_icons %}
+                                <i class="fas fa-star"></i>
+                            {% endfor %}
+                            {% for star in review.empty_star_icons %}
+                                <i class="far fa-star"></i>
+                            {% endfor %}
+                        </span>
+                        <span class="review-date">{{ review.datetime }}</span>
+                    </div>
+                    <p>{{ review.review_text }}</p>
+                </div>
+            {% empty %}
+                <p>No reviews yet.</p>
+            {% endfor %}
+        </div> {% endcomment %}
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 News App. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+   
+</body>
+<script>
+    var ctx = document.getElementById('sentimentChart').getContext('2d');
+    var sentimentChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Positive', 'Neutral', 'Negative'],
+            datasets: [{
+                label: 'Number of Articles',
+                data: [{{ poscnt }}, {{ neucnt }}, {{ negcnt }}],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(255, 99, 132, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</html>
