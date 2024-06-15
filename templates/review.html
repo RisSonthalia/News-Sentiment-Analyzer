@@ -55,6 +55,7 @@
             color: #fff; /* Adjust as needed */
             padding: 20px;
             text-align: center;
+            margin-top: 20px; /* Pushes content up */
         }
     
         .footer-content {
@@ -85,7 +86,11 @@
             padding: 20px;
             min-height: calc(100vh - 140px); /* Adjust based on header and footer height */
         }
-
+        .formcontainer{
+            display:flex;
+            justify-content:center;
+            align-item:center;
+        }
         .box {
             background-color: #fff;
             border-radius: 8px;
@@ -102,6 +107,7 @@
 
         .subtitle {
             color: #555;
+            font-weight:bold;
             margin-bottom: 10px;
         }
 
@@ -109,6 +115,8 @@
             background-color: #4CAF50;
             border-color: #4CAF50;
             color: #fff;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .button.is-primary:hover {
@@ -134,6 +142,28 @@
         .fas.fa-star, .far.fa-star {
             color: #f1c40f;
             font-size: 1.2rem;
+        }
+
+        .success-message {
+            color: #4CAF50;
+            margin-top: 10px;
+            text-align: center;
+            animation: fade-in 0.5s ease-out;
+        }
+
+        .login-message {
+            color: #555;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -167,15 +197,23 @@
             <h1 class="title">Customer Reviews</h1>
 
             <!-- Review Form -->
-            <div class="box">
-                <h2 class="subtitle">Write a Review</h2>
-                <form method="post" action="{% url 'review_page' %}">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="button is-primary">Submit Review</button>
-                </form>
+            <div class="formcontainer">
+                {% if user.is_authenticated %}
+                <div class="box">
+                    <h2 class="subtitle">Write a Review</h2>
+                    <form method="post" action="{% url 'review_page' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="button is-primary">Submit Review</button>
+                    </form>
+                    {% if submitted %}
+                        <p class="success-message">Review submitted successfully!</p>
+                    {% endif %}
+                </div>
+                {% else %}
+                    <p class="login-message">You must be logged in to submit a review.</p>
+                {% endif %}
             </div>
-
             <!-- Display Reviews -->
             <div class="box">
                 <h2 class="subtitle">Latest Reviews</h2>
@@ -184,9 +222,8 @@
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    <strong>{{ review.user.username }}</strong>
-                                    <br>
-                                    Rating: 
+                                    <strong>{{ review.user.first_name }} {{ review.user.last_name }}</strong>
+                                    <br> 
                                     {% for _ in review.star_icons %}
                                         <i class="fas fa-star"></i>
                                     {% endfor %}
@@ -219,3 +256,5 @@
     </footer>
 </body>
 </html>
+
+
