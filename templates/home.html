@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <link rel="stylesheet" href="static/style_home.css">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="#"><img src="/static/assets/logo.png" alt="News App"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="user-section">
+                            <span>Hello, {{ user.first_name }}</span>
+                            <a href="{% url 'logoutUser' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Stay Updated with the Latest News</h1>
+            <p>Your one-stop destination for current affairs, breaking news, and in-depth analysis.</p>
+            <div class="search-form search-bar flex">
+                <form action="{% url 'news_search' %}" method="GET" class="search-bar flex">
+                    <input id="search-text" type="text" name="query" class="news-input" placeholder="e.g. Science">
+                    <button type="submit" id="search-button" class="fas fa-search"></button>
+                </form>
+            </div>
+        </section>
+
+        <section class="featured-news">
+            <h2 class="Feature_text">Featured News</h2>
+            <div class="cards-container container flex" id="cards-container">
+                {%for title, desc , i, date, u,senti in mylist%}
+                <div class="card">
+                    <div class="card-header">
+                        <img src={{i}} alt="news-image" id="news-img">
+                    </div>
+                    <div class="card-content">
+                        <h3 id="news-title">{{title}}</h3>
+                        <h6 class="news-source" id="news-source">{{date}}</h6>
+                        <p class="news-desc" id="news-desc">{{desc}}</p>
+                        {% if senti == "Positive"%}
+                        <div class="sentiment positive">
+                            <span class="sentiment-badge">
+                                <i class="fas fa-smile sentiment-icon"></i>
+                                <span>Positive</span>
+                            </span>
+                        </div>
+                        {% elif senti == "Negative"%}
+                        <div class="sentiment negative">
+                            <span class="sentiment-badge">
+                                <i class="fas fa-frown sentiment-icon"></i>
+                                <span>Negative</span>
+                            </span>
+                        </div>
+                        {% else %}
+                        <div class="sentiment neutral">
+                            <span class="sentiment-badge">
+                                <i class="fas fa-meh sentiment-icon"></i>
+                                <span>Neutral</span>
+                            </span>
+                        </div>
+                        {% endif %}
+                        <a href="{{u}}" target="_blank" class="read-more-btn">Read More</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 News App. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

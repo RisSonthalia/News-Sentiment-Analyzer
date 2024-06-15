@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <nav>
+        <div class="main-nav container flex">
+            <a href="#" onclick="reload()" class="company-logo">
+                <img id="img-logo" src="/static/assets/logo.png" alt="company logo">
+            </a>
+            {% comment %} <div class="nav-links">
+                <ul class="flex">
+                    <li class="hover-link nav-item" id="ipl" onclick="onNavItemClick('ipl')">IPL</li>
+                    <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                    <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+                </ul>
+            </div> {% endcomment %}
+            <div class="heads">
+                <h1>Results for "{{query}}"</h1>
+            </div>
+            <div class="search-bar flex">
+                <form action="{% url 'news_search' %}" method="GET" class="search-bar flex">
+                    <input id="search-text" type="text" name="query" class="news-input" placeholder="e.g. Science">
+                    <button type="submit" id="search-button"  class="search-button">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="loading-spinner" class="loading-spinner"></div>
+    <div class="container">
+        <h2>Sentiment Analysis</h2>
+        <canvas id="sentimentChart" width="400" height="100"></canvas>
+    </div>
+    
+    <main>
+       
+        <div class="cards-container container flex" id="cards-container">
+            {%for title, desc , i, date, u,senti in mylist%}
+            <div class="card">
+                <div class="card-header">
+                    <img src={{i}} alt="news-image" id="news-img">
+                </div>
+                <div class="card-content">
+                    <h3 id="news-title">{{title}}</h3>
+                    <h6 class="news-source" id="news-source">{{date}}</h6>
+                    <p class="news-desc" id="news-desc">{{desc}}</p>
+                    {% if senti == "Positive"%}
+                    <div class="sentiment positive">
+                        <span class="sentiment-badge">
+                            <i class="fas fa-smile sentiment-icon"></i>
+                            <span>Positive</span>
+                        </span>
+                    </div>
+                    {% elif senti == "Negative"%}
+                    <div class="sentiment negative">
+                        <span class="sentiment-badge">
+                            <i class="fas fa-frown sentiment-icon"></i>
+                            <span>Negative</span>
+                        </span>
+                    </div>
+                    {% else %}
+                    <div class="sentiment neutral">
+                        <span class="sentiment-badge">
+                            <i class="fas fa-meh sentiment-icon"></i>
+                            <span>Neutral</span>
+                        </span>
+                    </div>
+                    {% endif %}
+                    <a href="{{u}}" target="_blank" class="read-more-btn">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+    <template id="template-news-card">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+            </div>
+            <div class="card-content">
+                <h3 id="news-title">This is the Title</h3>
+                <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6>
+                <p class="news-desc" id="news-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                    saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+                <div class="sentiment positive">
+                    <span class="sentiment-badge">
+                        <i class="fas fa-smile sentiment-icon"></i>
+                        <span>Positive</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('sentimentChart').getContext('2d');
+        var sentimentChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Number of Articles',
+                    data: [{{ poscnt }}, {{ neucnt }}, {{ negcnt }}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</html>

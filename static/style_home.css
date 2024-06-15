@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #1d1d1d;
+    color: #fff;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.nav-links ul {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links ul li {
+    margin-left: 1.5rem;
+}
+
+.nav-links ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-links ul li a:hover {
+    color: #ff6347;
+}
+
+.Feature_text{
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.news-input {
+    width: 300px; 
+    height: 36px; 
+    padding: 10px; 
+    font-size: 16px;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+}
+
+#search-button {
+    height: 36px;
+    border: none; 
+    background-color: #f1807e; 
+    cursor: pointer;
+    font-size: 18px; 
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/assets/hero.jpg') no-repeat center center/cover;
+    color: #fff;
+    padding: 4rem 1rem;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.search-form input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.25rem 0 0 0.25rem;
+    width: 300px;
+}
+
+.search-form button {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0 0.25rem 0.25rem 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #e5533b;
+}
+
+
+
+footer {
+    background-color: #1d1d1d;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-content p {
+    margin-bottom: 1rem;
+}
+
+.social-icons a {
+    color: #fff;
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #ff6347;
+}
+.read-more-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background-color: #0056b3;
+}
+main {
+    padding-block: 40px;
+}
+
+.cards-container {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 24px;
+    align-items: start;
+    display: flex;
+}
+
+.card {
+    width: 360px;
+    min-height: 400px;
+    box-shadow: 0 2px 8px var(--card-shadow-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    background-color: var(--card-background-color);
+    overflow: hidden;
+    transition: all var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.card:hover {
+    box-shadow: 0 4px 16px var(--card-shadow-color);
+    background-color: var(--card-hover-background-color);
+    transform: translateY(-4px);
+}
+
+.card-header img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-speed);
+}
+
+.card-header img:hover {
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.news-source {
+    margin-block: 16px;
+}
+#img-logo{
+    height: 80px;
+}
+.sentiment-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    transition: all var(--transition-speed);
+}
+
+.sentiment-icon {
+    margin-right: 4px;
+    transition: transform var(--transition-speed);
+}
+
+.sentiment .positive {
+    color: var(--positive-color);
+    background-color: var(--positive-bg);
+}
+
+.sentiment .neutral {
+    color: var(--neutral-color);
+    background-color: var (--neutral-bg);
+}
+
+.sentiment .negative {
+    color: var(--negative-color);
+    background-color: var(--negative-bg);
+}
+
+/* Card hover effects */
+.card:hover .sentiment-icon {
+    transform: scale(1.2);
+}
+
+/* Loading Spinner Styles */
+.loading-spinner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-top: 8px solid var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 100;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
