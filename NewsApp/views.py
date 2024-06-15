@@ -50,7 +50,7 @@ def login_menu(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('/login')
+    return redirect('/')
 
 def forgot_password(request):
     if request.method == 'POST':
