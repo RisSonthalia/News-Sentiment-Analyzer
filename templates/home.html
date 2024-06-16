@@ -6,9 +6,161 @@
     <title>News App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
-    <link rel="stylesheet" href="static/style_home.css">
 
+    <style>
+        /* Embedded style_home.css content */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+        .logo img {
+            height: 50px;
+        }
+        .nav-links ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-links ul li {
+            margin-right: 20px;
+        }
+        .nav-links ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-links ul li a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            background-image: url('/static/assets/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            padding: 100px 0;
+        }
+        .hero h1 {
+            margin-bottom: 20px;
+            font-size: 3rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        .search-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .search-form .news-input {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-form #search-button {
+            width: 40px;
+            padding: 10px;
+            border: none;
+            background-color: #555;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .search-form #search-button:hover {
+            background-color: #444;
+        }
+        .featured-news {
+            padding: 40px 0;
+            text-align: center;
+        }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            width: 300px;
+            overflow: hidden;
+        }
+        .card img {
+            width: 100%;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-content h3 {
+            margin: 0 0 10px 0;
+        }
+        .card-content .news-source {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .sentiment {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .sentiment-badge {
+            display: flex;
+            align-items: center;
+        }
+        .sentiment-icon {
+            margin-right: 5px;
+        }
+        .positive {
+            color: #28a745;
+        }
+        .negative {
+            color: #dc3545;
+        }
+        .neutral {
+            color: #ffc107;
+        }
+        .read-more-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .read-more-btn:hover {
+            background-color: #0056b3;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        .footer-content .social-icons a {
+            color: #fff;
+            margin-left: 10px;
+            font-size: 1.5rem;
+        }
+        .footer-content .social-icons a:hover {
+            color: #007bff;
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <nav>
