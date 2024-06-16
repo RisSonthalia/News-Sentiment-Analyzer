@@ -96,25 +96,18 @@
       
         transition: color 0.3s ease;
     }
-    .nav-links ul li span {
+    .nav-links ul span {
         color: #fff; 
         text-decoration: none;
-        
     }
 
     .nav-links ul li a:hover {
         color: #555; 
     }
 
-    .user-section {
-        display: flex;
-        align-items: center;
-    }
+   
 
-    .user-section span {
-        margin-right: 10px;
-    }
-
+    
     {% comment %} .reviews {
         margin-top: 40px;
     }
@@ -184,62 +177,92 @@
         color: #bbb; /* Adjust as needed */
     }
 
-    /* Media Query for smaller screens */
-@media (max-width: 768px) {
     .hamburger {
-        display: block;
-    }
-
-    .hamburger.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
-    .nav-links {
-        position: fixed;
-        left: -100%;
-        top: 70px;
-        gap: 0;
+        display: none;
         flex-direction: column;
-        background-color: #1d1d1d;
-        width: 100%;
-        text-align: center;
+        cursor: pointer;
+        position: relative; /* Ensure it respects the parent positioning */
+        z-index: 10; /* Ensure it's above other content */
+    }
+
+    .hamburger .bar {
+        width: 25px;
+        height: 3px;
+        right: 30px; 
+        background-color: #fff;
+        margin: 4px;
         transition: 0.3s;
     }
 
-    .nav-links ul {
-        flex-direction: column;
+    @media (max-width: 768px) {
+        .hamburger {
+            display: flex;
+            position: fixed; /* Ensure it stays fixed relative to the viewport */
+            right: 30px; /* Adjust position as needed */
+            top: 16px; /* Adjust position as needed */
+            z-index: 100; /* Ensure it's above other content */
+        }
+    
+        .nav-links {
+            position: fixed; /* Keep the nav links fixed */
+            left: -100%; /* Hide it off-screen initially */
+            top: 0px; /* Adjust top positioning based on header height */
+            gap: 0;
+            flex-direction: column;
+            background-color: #1d1d1d;
+            width: 100%;
+            height: 100vh; /* Add this line */
+            text-align: center;
+            transition: 0.3s;
+            z-index: 99; 
+            padding-top: 70px; /* Add this line */
+        }
+    
+        .nav-links ul {
+            flex-direction: column;
+            height: 100%;
+        }
+    
+        .nav-links.active {
+            left: 0;
+        }
+    
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+    
+        .hamburger.active .bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+    
+        .hamburger.active .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
     }
+    
 
-    .nav-links ul li {
-        margin: 16px 0;
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
     }
-
-    .nav-links.active {
-        left: 0;
-    }
-}
 </style>
 
 <body>
     <header>
-       <nav>
+        <nav>
             <div class="logo">
                 <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="nav-links">
+            <div class="nav-links" id="navLinks">
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     {% comment %} <li><a href="#">Categories</a></li> {% endcomment %}
@@ -250,7 +273,11 @@
                         <li class="user-section">
                             <span>Hello, {{ user.first_name }}</span>
                         </li>
-                        <li><a href="{% url 'logoutUser' %}">Logout</a></li>
+                        <li>
+                            <a href="{% url 'logoutUser' %}" class="logout-button">
+                                  <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                       </li>
                     {% else %}
                         <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
@@ -345,6 +372,25 @@
                 }
             }
         }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+     // Ensure sidebar stays fixed at top
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 768) { // Only for mobile view
+            navLinks.style.top = `${Math.max(70 - window.scrollY, 0)}px`;
+        }
+});
     });
 </script>
 </html>
