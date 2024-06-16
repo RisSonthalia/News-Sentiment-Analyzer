@@ -17,21 +17,74 @@
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            background-color: #f4f4f4;;
+            background-color: #f4f4f4;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            justify-content: flex-start;
+            min-height: 100vh;
             margin: 0;
         }
 
-        .container {
-            max-width: 400px;
+        header {
             width: 100%;
-            padding: 20px;
+            background-color: #1d1d1d;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #1d1d1d;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+        }
+        
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            margin-right: -1.5rem;
+        }
+        
+        .nav-links ul li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 10px;
+        }
+        
+        .nav-links ul li a:hover {
+            color: #ff6347;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        main {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 110%;
+            padding: 30px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         h2 {
@@ -43,32 +96,36 @@
         form {
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         label {
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
+            align-self: flex-start;
         }
 
         input[type="text"],
         input[type="email"],
         input[type="password"] {
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+            width: 100%;
         }
 
         button {
-            padding: 10px;
+            padding: 12px;
             background-color: #007BFF;
             color: #fff;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            width: 100%;
             margin-top: 10px;
         }
 
@@ -76,46 +133,109 @@
             background-color: #0056b3;
         }
 
+        .errorlist, .success-message {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
         .errorlist {
             color: red;
-            margin-bottom: 10px;
         }
 
         .success-message {
             color: green;
-            margin-bottom: 10px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #1d1d1d;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+            padding: 1rem 0;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ff6347;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Sign Up</h2>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            <label for="id_username">Username:</label>
-            {{ form.username }}
-            <label for="id_first_name">First Name:</label>
-            {{ form.first_name }}
-            <label for="id_last_name">Last Name:</label>
-            {{ form.last_name }}
-            <label for="id_email">Email:</label>
-            {{ form.email }}
-            <label for="id_password1">Password:</label>
-            {{ form.password1 }}
-            <label for="id_password2">Confirm Password:</label>
-            {{ form.password2 }}
-            <button type="submit">Sign Up</button>
-        </form>
-        <div class="register-link">
-            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'review_page' %}">Review</a></li>
+                    <li><a href="#footerid">Contact</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
+                        <li class="user-section">
+                            <span>Hello, {{ user.first_name }}</span>
+                        </li>
+                        <li><a href="{% url 'logoutUser' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <h2>Sign Up</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+                <label for="id_first_name">First Name:</label>
+                {{ form.first_name }}
+                <label for="id_last_name">Last Name:</label>
+                {{ form.last_name }}
+                <label for="id_email">Email:</label>
+                {{ form.email }}
+                <label for="id_password1">Password:</label>
+                {{ form.password1 }}
+                <label for="id_password2">Confirm Password:</label>
+                {{ form.password2 }}
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="register-link">
+                <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer id="footerid">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; 2024 News App. All rights reserved.</p>
+    </footer>
 </body>
 </html>
