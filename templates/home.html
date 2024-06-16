@@ -7,20 +7,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <link rel="stylesheet" href="static/style_home.css">
-
-</head>
+    
 <body>
     <header>
         <nav>
             <div class="logo">
                 <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="nav-links">
+            <div class="nav-links" id="navLinks">
                 <ul>
                     <li><a href="{% url 'home' %}">Home</a></li>
                     {% comment %} <li><a href="#">Categories</a></li> {% endcomment %}
@@ -31,7 +30,11 @@
                         <li class="user-section">
                             <span>Hello, {{ user.first_name }}</span>
                         </li>
-                        <li><a href="{% url 'logoutUser' %}">Logout</a></li>
+                        <li>
+                            <a href="{% url 'logoutUser' %}" class="logout-button">
+                                  <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                       </li>
                     {% else %}
                         <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
@@ -40,6 +43,7 @@
         </nav>
     </header>
 
+
     <main>
         <section class="hero">
             <h1>Stay Updated with the Latest News</h1>
@@ -47,7 +51,7 @@
             <div class="search-form search-bar flex">
                 <form action="{% url 'news_search' %}" method="GET" class="search-bar flex">
                     <input id="search-text" type="text" name="query" class="news-input" placeholder="e.g. Science">
-                    <button type="submit" id="search-button" class="fas fa-search"></button>
+                    <button type="submit" id="search-button" class="fas fa-search" disabled></button>
                 </form>
             </div>
         </section>
@@ -109,5 +113,36 @@
     </footer>
 
     <script src="static/script.js"></script>
+    <script>
+        // Enable search button only if there is text in the search bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchText = document.getElementById('search-text');
+            const searchButton = document.getElementById('search-button');
+            
+            searchText.addEventListener('input', function() {
+                searchButton.disabled = searchText.value.trim() === '';
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+         // Ensure sidebar stays fixed at top
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) { // Only for mobile view
+                navLinks.style.top = `${Math.max(70 - window.scrollY, 0)}px`;
+            }
+    });
+        });
+    </script>
+    
 </body>
 </html>
