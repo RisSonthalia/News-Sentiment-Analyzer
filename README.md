@@ -39,24 +39,31 @@ Follow these steps to set up and run the NewsApp on your local machine.
 3. Go to NewsAnalyzer and bash these commands
    ```bash
    pip install virtualenv
-
+   ```
+   ```bash
    python -m venv myenv
-
+   ```
+   ```bash
    cd myenv
-
+   ```
+   ```bash
    cd Scripts
-
+   ```
+   ```bash
    .\activate
-
+   ```
+   ```bash
    cd ../..
-
+   ```
+   ```bash
    pip install -r requirements.txt
-
+   ```
+   ```bash
    python manage.py migrate
-
+   ```
+   ```bash
    python manage.py runserver
    ```
-
 
 ### Prerequisites
 
