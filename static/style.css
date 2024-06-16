@@ -118,6 +118,26 @@ nav {
     display: flex;
     flex-wrap: wrap;
 }
+.logout {
+    margin-left: 20px;
+}
+
+.logout-button {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.logout-button i {
+    margin-right: 5px;
+}
+
+.logout-button:hover {
+    color: #ff6347;
+}
 
 .news-input {
     width: 240px;
