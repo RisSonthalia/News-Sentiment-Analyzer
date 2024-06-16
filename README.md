@@ -24,7 +24,7 @@ Here are some screenshots of the NewsApp in action:
 ![Home Page](screenshots/homepage.png)
 
 ### Sentiment Analysis Results
-![Sentiment Analysis](screenshots/results.png)
+![Sentiment Analysis](screenshots/screenshots.png)
 
 ## Getting Started
 
