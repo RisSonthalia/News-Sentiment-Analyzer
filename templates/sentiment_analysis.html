@@ -183,20 +183,68 @@
     .social-icons a:hover {
         color: #bbb; /* Adjust as needed */
     }
+
+    /* Media Query for smaller screens */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .nav-links {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        gap: 0;
+        flex-direction: column;
+        background-color: #1d1d1d;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+    }
+
+    .nav-links ul li {
+        margin: 16px 0;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+}
 </style>
 
 <body>
     <header>
-        <nav>
+       <nav>
             <div class="logo">
                 <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
             </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <div class="nav-links">
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Home</a></li>
+                    {% comment %} <li><a href="#">Categories</a></li> {% endcomment %}
                     <li><a href="{% url 'review_page' %}">Review</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#footerid">Contact</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
                         <li class="user-section">
