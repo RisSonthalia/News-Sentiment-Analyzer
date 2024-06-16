@@ -15,12 +15,17 @@
             <div class="logo">
                 <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
             </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <div class="nav-links">
                 <ul>
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">Categories</a></li>
+                    {% comment %} <li><a href="#">Categories</a></li> {% endcomment %}
                     <li><a href="{% url 'review_page' %}">Review</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#footerid">Contact</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
                         <li class="user-section">
@@ -50,57 +55,59 @@
         <section class="featured-news">
             <h2 class="Feature_text">Featured News</h2>
             <div class="cards-container container flex" id="cards-container">
-                {%for title, desc , i, date, u,senti in mylist%}
-                <div class="card">
-                    <div class="card-header">
-                        <img src={{i}} alt="news-image" id="news-img">
-                    </div>
-                    <div class="card-content">
-                        <h3 id="news-title">{{title}}</h3>
-                        <h6 class="news-source" id="news-source">{{date}}</h6>
-                        <p class="news-desc" id="news-desc">{{desc}}</p>
-                        {% if senti == "Positive"%}
-                        <div class="sentiment positive">
-                            <span class="sentiment-badge">
-                                <i class="fas fa-smile sentiment-icon"></i>
-                                <span>Positive</span>
-                            </span>
+                {% for title, desc, i, date, u, senti in mylist %}
+                    {% if forloop.counter0 < 16 %}
+                        <div class="card">
+                            <div class="card-header">
+                                <img src="{{ i }}" alt="news-image" id="news-img">
+                            </div>
+                            <div class="card-content">
+                                <h3 id="news-title">{{ title }}</h3>
+                                <h6 class="news-source" id="news-source">{{ date }}</h6>
+                                <p class="news-desc" id="news-desc">{{ desc }}</p>
+                                {% if senti == "Positive" %}
+                                    <div class="sentiment positive">
+                                        <span class="sentiment-badge">
+                                            <i class="fas fa-smile sentiment-icon"></i>
+                                            <span>Positive</span>
+                                        </span>
+                                    </div>
+                                {% elif senti == "Negative" %}
+                                    <div class="sentiment negative">
+                                        <span class="sentiment-badge">
+                                            <i class="fas fa-frown sentiment-icon"></i>
+                                            <span>Negative</span>
+                                        </span>
+                                    </div>
+                                {% else %}
+                                    <div class="sentiment neutral">
+                                        <span class="sentiment-badge">
+                                            <i class="fas fa-meh sentiment-icon"></i>
+                                            <span>Neutral</span>
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                <a href="{{ u }}" target="_blank" class="read-more-btn">Read More</a>
+                            </div>
                         </div>
-                        {% elif senti == "Negative"%}
-                        <div class="sentiment negative">
-                            <span class="sentiment-badge">
-                                <i class="fas fa-frown sentiment-icon"></i>
-                                <span>Negative</span>
-                            </span>
-                        </div>
-                        {% else %}
-                        <div class="sentiment neutral">
-                            <span class="sentiment-badge">
-                                <i class="fas fa-meh sentiment-icon"></i>
-                                <span>Neutral</span>
-                            </span>
-                        </div>
-                        {% endif %}
-                        <a href="{{u}}" target="_blank" class="read-more-btn">Read More</a>
-                    </div>
-                </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="footer-content">
+        <div class="footer-content" id="footerid">
             <p>&copy; 2024 News App. All rights reserved.</p>
             <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href=""><i class="fab fa-facebook-f"></i></a>
+                <a href=""><i class="fab fa-twitter"></i></a>
+                <a href=""><i class="fab fa-instagram"></i></a>
+                <a href=""><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="static/script.js"></script>
 </body>
 </html>
