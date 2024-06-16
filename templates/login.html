@@ -17,14 +17,67 @@
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            background-color: #f4f4f4;;
+            background-color: #f4f4f4;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
         }
 
+        header {
+            width: 100%;
+            background-color: #1d1d1d;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #1d1d1d;
+            color: #fff;
+            padding: 10px 20px; /* Padding for the navigation */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px; /* Adjusted height of the logo */
+        }
+        
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            margin-right: -1.5rem; /* Counteract the margin on the last element */
+        }
+        
+        .nav-links ul li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 10px; /* Padding for each navigation link */
+        }
+        
+        .nav-links ul li a:hover {
+            color: #ff6347;
+            background-color: rgba(255, 255, 255, 0.1); /* Background color on hover */
+            border-radius: 5px; /* Rounded corners on hover */
+        }
+        
+
+        .nav-links ul li a:hover {
+            color: #ff6347;
+        }
+         main{
+            margin-top:40px;
+            margin-bottom:20px;
+         }
         .container {
             max-width: 400px;
             width: 100%;
@@ -32,105 +85,141 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center; /* Center the content horizontally */
         }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
+        
         form {
             display: flex;
             flex-direction: column;
+            align-items: center; /* Center form elements vertically */
         }
-
+        
         label {
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
+            text-align: left; /* Left-align labels */
+            width: 100%; /* Ensure labels take full width */
         }
-
+        
         input[type="text"],
         input[type="password"] {
-            padding: 10px;
-            margin-bottom: 15px;
+            width: 100%; /* Full width for input fields */
+            padding: 12px; /* Increased padding for better touch targets */
+            margin-bottom: 20px; /* Increased spacing between inputs */
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
-
+        
         button {
-            padding: 10px;
+            width: 100%; /* Full width for the button */
+            padding: 12px;
             background-color: #007BFF;
             color: #fff;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 10px; /* Space between button and inputs */
         }
-
+        
         button:hover {
             background-color: #0056b3;
         }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 20px; /* Increased margin for better separation */
+        }
+        
+       
 
         .errorlist {
             color: red;
             margin-bottom: 10px;
-        }
-
-        .forgot-password {
             text-align: center;
-            margin-top: 10px;
         }
 
-        .signup-google {
+        footer {
+            background-color: #1d1d1d;
+            color: #fff;
             text-align: center;
-            margin-top: 10px;
-            color: #007BFF;
-            cursor: pointer;
+            width: 100%;
+            padding: 1rem 0;
+            margin-top: auto;
         }
 
-        .signup-google:hover {
-            text-decoration: underline;
+        .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 10px;
+        .social-icons a:hover {
+            color: #ff6347;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Login</h2>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {{ form.password.label_tag }}
-            {{ form.password }}
-            <button type="submit">Login</button>
-        </form>
-        {% comment %} <div class="forgot-password">
-            <a href="{% url 'forgot_password' %}">Forgot Password?</a>
-        </div> {% endcomment %}
-        {% comment %} <div class="signup-google">
-            <span>Or sign up with Google:</span> <!-- Replace with appropriate OAuth integration -->
-            <!-- Example link -->
-            <a href="#">Sign up with Google</a>
-        </div> {% endcomment %}
-        <div class="register-link">
-            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="/static/assets/logo.png" alt="News App"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'review_page' %}">Review</a></li>
+                    <li><a href="#footerid">Contact</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
+                        <li class="user-section">
+                            <span>Hello, {{ user.first_name }}</span>
+                        </li>
+                        <li><a href="{% url 'logoutUser' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Login</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="errorlist">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label for="id_username">Username</label>
+                {{ form.username }}
+                <label for="id_password">Password</label>
+                {{ form.password }}
+                <button type="submit">Login</button>
+            </form>
+            <div class="register-link">
+                <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <p>&copy; 2024 News App. All rights reserved.</p>
+    </footer>
 </body>
 </html>
