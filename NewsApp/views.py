@@ -18,6 +18,9 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from .forms import ReviewForm
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 def register(request):
     if request.method == 'POST':
@@ -78,36 +81,54 @@ def forgot_password(request):
     return render(request, 'forgot_password.html', {'form': form})
     
 def index(request):
-#    if request.user.is_anonymous:
-#         return redirect("/login")
-#    else:
-        query="Featured News"
-        mylist,poscnt,neucnt,negcnt=find_news(query)
-        context = {'mylist': mylist,'poscnt':poscnt,'negcnt':negcnt,'neucnt':neucnt}
-        return render(request, 'home.html',context)
+    # if request.user.is_anonymous:
+    #     return redirect("/login")
+    # else:
+        query = "Featured News"
+        cache_key = f"featured_news_{query}"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            mylist, poscnt, neucnt, negcnt = cached_data
+        else:
+            mylist, poscnt, neucnt, negcnt = find_news(query)
+            cache_timeout = getattr(settings, 'CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+            cache.set(cache_key, (mylist, poscnt, neucnt, negcnt), cache_timeout)
+
+        context = {'mylist': mylist, 'poscnt': poscnt, 'negcnt': negcnt, 'neucnt': neucnt}
+        return render(request, 'home.html', context)
 
 def news_search(request):
     # if request.user.is_anonymous:
-    #    return redirect("/login")
+    #     return redirect("/login")
     # else:
         if request.method == 'GET':
             query = request.GET.get('query', '')
             if query:
-                mylist,poscnt,neucnt,negcnt=find_news(query)
-                
-                 # Save the search data
-                if not request.user.is_anonymous:
-                    search_query = SearchQueries(
-                    user=request.user,
-                    keyword=query,
-                    positive_articles=poscnt,
-                    negative_articles=neucnt,
-                    neutral_articles=negcnt
-                    )
-                    search_query.save()
-        
-                context = {'mylist': mylist,'query':query,'poscnt':poscnt,'negcnt':negcnt,'neucnt':neucnt}
+                cache_key = f"search_results_{query}"
+                cached_data = cache.get(cache_key)
+
+                if cached_data:
+                    mylist, poscnt, neucnt, negcnt = cached_data
+                else:
+                    mylist, poscnt, neucnt, negcnt = find_news(query)
+                    cache_timeout = getattr(settings, 'CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+                    cache.set(cache_key, (mylist, poscnt, neucnt, negcnt), cache_timeout)
+
+                    # Save the search data
+                    if not request.user.is_anonymous:
+                        search_query = SearchQueries(
+                            user=request.user,
+                            keyword=query,
+                            positive_articles=poscnt,
+                            negative_articles=neucnt,
+                            neutral_articles=negcnt
+                        )
+                        search_query.save()
+
+                context = {'mylist': mylist, 'query': query, 'poscnt': poscnt, 'negcnt': negcnt, 'neucnt': neucnt}
                 return render(request, 'index.html', context)
+
         # If no query is provided, return the default news data
         return index(request)
 
