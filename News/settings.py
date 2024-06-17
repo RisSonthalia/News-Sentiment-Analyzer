@@ -129,6 +129,13 @@ STATICFILES_DIRS=[
     os.path.join(BASE_DIR,"static")
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 3600,  # 1 hour
+    }
+}
+
 # # settings.py
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'smtp.yourmailserver.com'
