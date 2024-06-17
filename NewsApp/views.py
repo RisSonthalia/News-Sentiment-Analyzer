@@ -112,18 +112,19 @@ def news_search(request):
         return index(request)
 
 def find_news(query):
-                API_KEY = "a2175caae9854461b90dcd24fb71f8f1"
+                # API_KEY = "a2175caae9854461b90dcd24fb71f8f1"
+                API_KEY = "86edec7c7cb347ba87deb4516cd66d79"
                 url = "https://newsapi.org/v2/everything?q="
                 # Get the news data
                 try:
                     response = requests.get(f"{url}{query}&sortBy=popularity&apiKey={API_KEY}")
                     response.raise_for_status()
-                    india_news = response.json()
+                    news = response.json()
                 except requests.exceptions.RequestException as e:
                     print(e)
-                    india_news = {'articles': []}  # Default to an empty list if there was an error
+                    news = {'articles': []}  # Default to an empty list if there was an error
 
-                articles = india_news.get('articles', [])
+                articles = news.get('articles', [])
                 
                 desc = []
                 title = []
