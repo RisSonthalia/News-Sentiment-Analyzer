@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,243 +14,209 @@
     {% comment %} <link rel="stylesheet" href="static/style_home.css">
     <link rel="stylesheet" href="static/style.css"> {% endcomment %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
-</head>
-<style>
-    body {
-        background-color: #f4f4f4;
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding-top: 130px; /* Adjust based on the height of your fixed nav */
-        padding-bottom: 60px; /* Adjust based on the height of your fixed footer */
-    }
 
-    .container {
-        max-width: 800px;
-        margin: auto; /* This sets 20px margin on top and bottom, and auto on the sides */
-        padding-inline: 16px;
-        overflow: hidden;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-       
-    }
-
-    h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #333;
-    }
-
-    form {
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    select {
-        padding: 8px 12px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 16px;
-    }
-
-    .chart-container {
-        text-align:center;
-        position: relative;
-        height: 400px;
-        width: 100%;
-    }
-
-    nav {
-        background-color: #1d1d1d;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        padding: 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .logo img {
-        height: 50px; 
-    }
-
-    .nav-links ul {
-        list-style-type: none;
-        display: flex;
-        gap: 20px;
-    }
-
-    .nav-links ul li {
-        margin: 0;
-    }
-
-    .nav-links ul li a {
-        color: #fff; 
-        text-decoration: none;
-      
-        transition: color 0.3s ease;
-    }
-    .nav-links ul span {
-        color: #fff; 
-        text-decoration: none;
-    }
-
-    .nav-links ul li a:hover {
-        color: #555; 
-    }
-
-   
-
-    
-    {% comment %} .reviews {
-        margin-top: 40px;
-    }
-
-    .review {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 16px;
-        background-color: #fff;
-    }
-
-    .review-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-
-    .review-stars {
-        color: #f39c12; /* Star color */
-        font-size: 20px;
-    }
-
-    .review-date {
-        font-size: 12px;
-        color: #777;
-    } {% endcomment %}
-
-    /* Font Awesome icons styling */
-    .fas.fa-star {
-        color: #f39c12; /* Filled star color */
-    }
-
-    .far.fa-star {
-        color: #ddd; /* Empty star color */
-    }
-
-    footer {
-        background-color: #333; /* Adjust as needed */
-        color: #fff; /* Adjust as needed */
-        padding: 20px;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
-
-    .footer-content {
-        text-align: center;
-    }
-
-    .social-icons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .social-icons a {
-        color: #fff; /* Adjust as needed */
-        margin: 0 10px;
-        font-size: 18px;
-        transition: color 0.3s ease;
-    }
-
-    .social-icons a:hover {
-        color: #bbb; /* Adjust as needed */
-    }
-
-    .hamburger {
-        display: none;
-        flex-direction: column;
-        cursor: pointer;
-        position: relative; /* Ensure it respects the parent positioning */
-        z-index: 10; /* Ensure it's above other content */
-    }
-
-    .hamburger .bar {
-        width: 25px;
-        height: 3px;
-        right: 30px; 
-        background-color: #fff;
-        margin: 4px;
-        transition: 0.3s;
-    }
-
-    @media (max-width: 768px) {
-        .hamburger {
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding-top: 130px;
             display: flex;
-            position: fixed; /* Ensure it stays fixed relative to the viewport */
-            right: 30px; /* Adjust position as needed */
-            top: 16px; /* Adjust position as needed */
-            z-index: 100; /* Ensure it's above other content */
-        }
-    
-        .nav-links {
-            position: fixed; /* Keep the nav links fixed */
-            left: -100%; /* Hide it off-screen initially */
-            top: 0px; /* Adjust top positioning based on header height */
-            gap: 0;
             flex-direction: column;
-            background-color: #1d1d1d;
-            width: 100%;
-            height: 100vh; /* Add this line */
-            text-align: center;
-            transition: 0.3s;
-            z-index: 99; 
-            padding-top: 70px; /* Add this line */
+            min-height: 100vh; 
         }
-    
-        .nav-links ul {
-            flex-direction: column;
-            height: 100%;
-        }
-    
-        .nav-links.active {
-            left: 0;
-        }
-    
-        .hamburger.active .bar:nth-child(2) {
-            opacity: 0;
-        }
-    
-        .hamburger.active .bar:nth-child(1) {
-            transform: translateY(8px) rotate(45deg);
-        }
-    
-        .hamburger.active .bar:nth-child(3) {
-            transform: translateY(-8px) rotate(-45deg);
-        }
-    }
-    
 
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding-inline: 16px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        100% {
-            opacity: 1;
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
         }
-    }
-</style>
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            text-align: center;
+            position: relative;
+            height: 400px;
+            width: 100%;
+            overflow: hidden; 
+        }
+
+        nav {
+            background-color: #1d1d1d;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .nav-links ul {
+            list-style-type: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links ul li {
+            margin: 0;
+        }
+
+        .nav-links ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links ul span {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-links ul li a:hover {
+            color: #555;
+        }
+
+        .fas.fa-star {
+            color: #f39c12;
+        }
+
+        .far.fa-star {
+            color: #ddd;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto; 
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #bbb;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hamburger .bar {
+            width: 25px;
+            height: 3px;
+            right: 30px;
+            background-color: #fff;
+            margin: 4px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+                position: fixed;
+                right: 30px;
+                top: 16px;
+                z-index: 100;
+            }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                gap: 0;
+                flex-direction: column;
+                background-color: #1d1d1d;
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                transition: 0.3s;
+                z-index: 99;
+                padding-top: 70px;
+            }
+
+            .nav-links ul {
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
 
 <body>
     <header>
@@ -269,23 +236,23 @@
                     <li><a href="{% url 'review_page' %}">Review</a></li>
                     <li><a href="#footerid">Contact</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
-                        <li class="user-section">
-                            <span>Hello, {{ user.first_name }}</span>
-                        </li>
-                        <li>
-                            <a href="{% url 'logoutUser' %}" class="logout-button">
-                                  <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                       </li>
+                    <li><a href="{% url 'sentiment_analysis' %}">Sentiment Analysis</a></li>
+                    <li class="user-section">
+                        <span>Hello, {{ user.first_name }}</span>
+                    </li>
+                    <li>
+                        <a href="{% url 'logoutUser' %}" class="logout-button">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
     </header>
-    
+
     <main>
         <div class="container">
             <h2>Sentiment Analysis</h2>
@@ -303,30 +270,6 @@
                 <canvas id="sentimentChart"></canvas>
             </div>
         </div>
-        {% comment %} <!-- In sentiment_analysis.html -->
-        <div class="reviews container">
-            <h3>Customer Reviews</h3>
-            {% for review in reviews %}
-                <div class="review">
-                    <div class="review-header">
-                        <span><strong>{{ review.user.username }}</strong></span>
-                        <span class="review-stars">
-                            {% for star in review.star_icons %}
-                                <i class="fas fa-star"></i>
-                            {% endfor %}
-                            {% for star in review.empty_star_icons %}
-                                <i class="far fa-star"></i>
-                            {% endfor %}
-                        </span>
-                        <span class="review-date">{{ review.datetime }}</span>
-                    </div>
-                    <p>{{ review.review_text }}</p>
-                </div>
-            {% empty %}
-                <p>No reviews yet.</p>
-            {% endfor %}
-        </div> {% endcomment %}
-
     </main>
 
     <footer>
@@ -341,56 +284,55 @@
         </div>
     </footer>
 
-   
-</body>
-<script>
-    var ctx = document.getElementById('sentimentChart').getContext('2d');
-    var sentimentChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Positive', 'Neutral', 'Negative'],
-            datasets: [{
-                label: 'Number of Articles',
-                data: [{{ poscnt }}, {{ neucnt }}, {{ negcnt }}],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(255, 99, 132, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    <script>
+        var ctx = document.getElementById('sentimentChart').getContext('2d');
+        var sentimentChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Number of Articles',
+                    data: [{{ poscnt }}, {{ neucnt }}, {{ negcnt }}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
         });
+    </script>
 
-     // Ensure sidebar stays fixed at top
-    window.addEventListener('scroll', () => {
-        if (window.innerWidth <= 768) { // Only for mobile view
-            navLinks.style.top = `${Math.max(70 - window.scrollY, 0)}px`;
-        }
-});
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            window.addEventListener('scroll', () => {
+                if (window.innerWidth <= 768) {
+                    navLinks.style.top = `${Math.max(70 - window.scrollY, 0)}px`;
+                }
+            });
+        });
+    </script>
+</body>
+
 </html>
