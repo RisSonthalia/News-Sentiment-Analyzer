@@ -14,7 +14,7 @@ NewsApp is a dynamic web application that aggregates the latest news articles an
 
 ## Live Demo
 
-Check out the live demo of NewsApp [here](https://news-analyzer-two.vercel.app).
+Check out the live demo of NewsApp [here](https://news-app-gray-tau.vercel.app/).
 
 ## Screenshots
 
