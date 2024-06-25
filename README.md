@@ -1,4 +1,4 @@
-# NewsApp
+# News Sentiment Analyzer
 
 ## Introduction
 
@@ -44,7 +44,7 @@ Follow these steps to set up and run the NewsApp on your local machine.
    python -m venv myenv
    ```
    ```bash
-   cd myen
+   cd myenv
    ```
    ```bash
    cd Scripts
